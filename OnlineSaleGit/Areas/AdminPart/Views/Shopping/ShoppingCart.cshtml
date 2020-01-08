@@ -1,0 +1,52 @@
+﻿
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@using OnlineSale.Areas.AdminPart.Models.OnlineSaleTable
+@model OnlineSale.Areas.AdminPart.Models.ModelView.ShoppingView
+    <div class="row clearfix" style="height:10px"></div>
+<div class="row">
+    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+        <p class="font-weight-bold">Şifariş edilən məhsullar</p>
+    </div>
+</div>
+<div class="row">
+    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+        <table class="table table-hover table-bordered">
+            <thead class="thead-dark">
+                <tr>
+                    <th>Məhsul adı</th>
+                    <th>Kodu</th>
+                    <th>Qiyməti</th>
+                    <th>Miqdarı</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (Stock item in Model.ProductList)
+                {
+                    <tr>
+                        <td style="vertical-align:middle">
+                            <span class="text-center">@item.ProductName</span><br/>
+                            <img src="~/Content/ProductMainImg/@item.MainPhotoPath" style="height:30%" />
+                        </td>
+                        <td style="vertical-align:middle">@item.ProductCode</td>
+                        <td style="vertical-align:middle">@item.Price</td>
+                        <td style="vertical-align:middle">@item.Quantity</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+<div class="row clearfix" style="height:10px"></div>
+<div class="row">
+    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+        @using (Html.BeginForm("OrderIsProcessed", "Shopping", FormMethod.Post))
+        {
+            @Html.HiddenFor(m => m.CustomerId)
+            <input type="submit" class="btn btn-sm btn-success form-control font-weight-bolder mb-1 col-xl-2" value="İcra et" />
+        }
+            <a class="btn btn-sm btn-secondary font-weight-bold form-control col-xl-2" href="/AdminPart/Shopping/GetShopping">&#8592 Sifarişlərə qayıt</a>
+    </div>
+</div>

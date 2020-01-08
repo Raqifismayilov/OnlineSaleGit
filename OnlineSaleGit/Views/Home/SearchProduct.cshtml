@@ -1,0 +1,48 @@
+﻿
+@{
+    Layout = "~/Views/Shared/_LayoutUser.cshtml";
+}
+
+@using OnlineSale.Areas.AdminPart.Models.OnlineSaleTable
+@using OnlineSale.Areas.AdminPart.Models.ModelView
+@model OnlineSale.Models.HomeView
+<div class="row clear" style="height:10px"></div>
+<div class="row">
+    <div class="col-lg-12">
+        @if (Model.StockList.Count != 0)
+        {
+            foreach (var item in Model.StockList)
+            {
+                @item.Price<br />
+                @item.ProductCategory<br />
+                @item.ProductCode
+            }
+        }
+        else
+        {
+
+            <p class="text-center font-weight-bold">@ViewBag.Result</p>
+            <p class="text-center text-secondary">@ViewBag.SubResult</p>
+
+            using (Html.BeginForm("GetProduct", "Home", FormMethod.Get, new { @class = "row text-center" }))
+            {
+                <div class="col-lg-12">
+                    <div class="btn-group">
+                        <select class="form-control text-center" name="id">
+                            <option value="0" selected disabled>-Məhsul üzrə bütün kategoriya-</option>
+                            @foreach (var item in Model.ProductsCategorys)
+                            {
+                                <option class="font-weight-bold" value="@item.Id">@item.ProductName</option>
+                            }
+                        </select>
+                        <input type="submit" class="btn btn-success" value="axtar" />
+                    </div>
+                </div>
+            }
+            <div class="row clear" style="height:50px"></div>
+            <hr />
+        }
+
+    </div>
+</div>
+

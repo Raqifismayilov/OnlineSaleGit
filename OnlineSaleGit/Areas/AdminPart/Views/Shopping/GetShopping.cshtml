@@ -1,0 +1,106 @@
+﻿
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    int quantity = 0;
+    string backColor = "alert-success";
+}
+
+@using OnlineSale.Areas.AdminPart.Models.OnlineSaleTable
+@model OnlineSale.Areas.AdminPart.Models.ModelView.ShoppingView
+
+
+<div class="row clearfix" style="height:15px;"></div>
+<div class="row">
+    @using (Html.BeginForm("CustomerSearch", "Shopping", FormMethod.Post, new { @class = "col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 form-horizontal" }))
+    {
+        <div class="row">
+            <div class="col-md-2">
+                <select class="form-control font-weight-bold" name="SelectedValue">
+                    <option value="" selected disabled>--Seçin--</option>
+                    <option value="false">Yeni sifariş</option>
+                    <option value="true">İcra edilən</option>
+                </select>
+            </div>
+            <div class="col-md-2">
+                @Html.TextBoxFor(m => new { m.SelectedCustomer.SelectedDate }.SelectedDate, new { type = "date", @class = "form-control font-weight-bold" })
+            </div>
+            <div class="col-md-2">
+                <input type="submit" value="Təsdiqlə" class="btn btn-sm btn-success form-control font-weight-bold" />
+            </div>
+        </div>
+    }
+</div>
+<div class="row clearfix" style="height:10px"></div>
+<hr />
+<p class="font-weight-bold text-center">Sifariş cədvəli</p>
+<div class="row">
+    <div class="col-xl-12">
+        <p>
+            <span style="color:red;font-weight:bold">Yeni sifarişlər:</span>
+            <span style="font-weight:bold">
+                @if (Model.CustomerList != null)
+                {
+                    @Model.CustomerList.Where(m => m.PurchaseStatus == false).ToList().Count;
+                }
+            </span>
+            <span style="color:green;font-weight:bold">İcra edilənlər:</span>
+            <span style="font-weight:bold">
+                @if (Model.CustomerList != null)
+                {
+                    @Model.CustomerList.Where(m => m.PurchaseStatus == true).ToList().Count;
+                }
+                </span>
+        </p>
+    </div>
+</div>
+<div class="row align-content-center">
+    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+        <table class="table table-responsive-lg table-responsive-sm border table-hover">
+            <thead class="thead-dark">
+                <tr class="text-center" style="vertical-align:middle">
+                    <th class="border-right" style="width:5%">Sıra sayı</th>
+                    <th style="vertical-align:middle">Soyadı Adı Ata Adı</th>
+                    <th style="vertical-align:middle">Əlaqə | Mail</th>
+                    <th style="vertical-align:middle">Sifariş tarix</th>
+                    <th style="vertical-align:middle">Icra statusu</th>
+                    <th style="vertical-align:middle">Sifariş edilən məhsullar</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.CustomerList != null)
+                {
+                    foreach (Customer item in Model.CustomerList)
+                    {
+                        quantity++;
+                        if (!item.PurchaseStatus)
+                        {
+                            backColor = "alert-danger";
+                        }
+                        <tr class="text-center font-weight-bold" style="vertical-align:middle;border-bottom:2px solid">
+                            <td style="vertical-align:middle" class="border-right">@quantity</td>
+                            <td style="vertical-align:middle">@item.Lastname @item.Firstname</td>
+                            <td style="vertical-align:middle">
+                                <a href="mailto:@item.Email">@item.Email</a><br />
+                                <a href="tel:@item.MobileNumber">@item.MobileNumber</a>
+                            </td>
+                            <td style="vertical-align:middle">@item.DateOfPurchase.ToShortDateString()</td>
+                            @if (item.PurchaseStatus == false)
+                            {
+                                <td style="vertical-align:middle;background-color:red;color:white">Yeni sifariş</td>
+                            }
+                            else
+                            {
+                                <td style="vertical-align:middle;background-color:green;color:white">İcra edilib</td>
+                            }
+                            <td style="vertical-align:middle">
+                                <a href="/AdminPart/Shopping/ShoppingCart/@item.CustomerId"
+                                   class="btn-lg btn-sm btn btn-primary col-xl-4 col-lg-6 col-md-12 col-sm-12 col-12 form-control font-weight-bold">Baxış</a>
+                            </td>
+                        </tr>
+                    }
+                }
+                </tbody>
+        </table>
+    </div>
+</div>
